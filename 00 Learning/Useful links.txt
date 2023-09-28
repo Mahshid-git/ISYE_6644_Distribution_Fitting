@@ -1,4 +1,6 @@
 Create and publish your first Python library:
-
 https://towardsdatascience.com/deep-dive-create-and-publish-your-first-python-library-f7f618719e14
+
+MLE Estimates:
+https://www.projectrhea.org/rhea/index.php/Maximum_Likelihood_Estimation_Analysis_for_various_Probability_Distributions
 
