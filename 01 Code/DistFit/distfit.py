@@ -14,13 +14,124 @@ class Fitting():
     #################################################
     #########   Discrete Distributions   ############
     ################################################# 
-    # def bernouli_fit(self, data):
-    #     pass
+    # 1) Bernoulli(p)
+    def bernoulli_fit(self, data):
+        '''
+        fits data to ber(p) distribution
 
-    # def geometric_fit(self, data):
-    #     pass
+        Args:
+            data (pandas dataframe): data to be fitted to the specified distribution 
+
+        Returns: 
+            p: parameter of bernoulli distribution , success rate
+        '''
+        if isinstance(data, pd.DataFrame):
+                pass
+        else:
+                data = pd.Series(data)
+        p = data.mean()
+        return p
     
+    def bernoulli_plot(self, data, params):
+        x = np.arange(0, 2)
+        y = [1-params, params]
+        plt.plot(x, y, marker='o', linestyle=' ', color ='r', label="Fitted Bernoulli")
+        bins = np.arange(0, data.max() + 1.5) - 0.5 # trick to have bins centered on integers
+        plt.hist(data, alpha=.4, density = True, label="Data Histogram", bins=bins)
+        plt.legend()
+        plt.show()
+        pass
+    
+    # 2) Binomial(n,p)
+    def binomial_fit(self, data, n):
+        '''
+        fits data to bin(n,p) distribution assuming n is known
 
+        Args:
+            data (pandas dataframe): data to be fitted to the specified distribution 
+            n: number of independent Bernoulli trials
+
+        Returns: 
+            p: parameter of binomial distribution  
+        '''
+        print('\nNote: When estimating p with very rare events and a small n, using MLE estimator leads to p=0 which sometimes is unrealistic and undesirable. In such cases, use alternative estimators.\n\n')
+        if isinstance(data, pd.DataFrame):
+                pass
+        else:
+                data = pd.Series(data)
+        p = data.mean()/n
+        return (n, p)
+    
+    def binomial_plot(self, data, params):
+        import math
+        n = params[0]
+        x = np.arange(0, n+1) # number of success in n trials
+        y = [math.comb(n, i)*(params[1]**i)*((1-params[1])**(n-i)) for i in x]
+        bins = np.arange(0, data.max() + 1.5) - 0.5 # trick to have bins centered on integers
+        plt.hist(data, alpha=.4, density = True, label="Data Histogram", bins=bins)
+        plt.plot(x, y, marker='o', linestyle=' ', color ='r', label="Fitted Binomial")
+        plt.legend()
+        plt.show()
+        pass
+    
+    # 3) Geometric(p)
+    def geometric_fit(self, data):
+        '''
+        fits data to geom(p) distribution
+
+        Args:
+            data (pandas dataframe): data to be fitted to the specified distribution 
+
+        Returns: 
+            p: parameter of geometric distribution  
+        '''
+        if isinstance(data, pd.DataFrame):
+                pass
+        else:
+                data = pd.Series(data)
+        p = 1/(data.mean()+1)
+        return p
+    
+    def geometric_plot(self, data, params):
+        x = np.arange(1, data.max())
+        y = (params)*(1-params)**x
+        plt.plot(x, y, marker='o', linestyle=' ', color ='r', label="Fitted Geometric")
+        bins = np.arange(0, data.max() + 1.5) - 0.5 # trick to have bins centered on integers
+        plt.hist(data, alpha=.4, density = True, label="Data Histogram", bins=bins)
+        plt.legend()
+        plt.show()
+        pass
+
+    # 4) Poisson(lmabda)
+    def poisson_fit(self, data):
+        '''
+        fits data to Poisson distribution
+
+        Args:
+            data (pandas dataframe): data to be fitted to the specified distribution 
+
+        Returns: 
+            _lambda: parameter of Poisson distribution  
+        '''
+        if isinstance(data, pd.DataFrame):
+                pass
+        else:
+                data = pd.Series(data)
+                
+        _lambda = data.mean()
+        return _lambda
+    
+    def poisson_plot(self, data, params):
+        from scipy.special import factorial
+        _lambda = params
+        x = np.arange(0, 51)
+        y = np.exp(-_lambda)*_lambda**x/factorial(x)
+        bins = np.arange(0, data.max() + 1.5) - 0.5 # trick to have bins centered on integers
+        plt.hist(data, alpha=.4, density = True, label="Data Histogram", bins=bins)
+        plt.plot(x, y, marker='o', linestyle=' ', color ='r', label="Fitted Poisson")
+        plt.legend()
+        plt.show()
+        pass
 
     #################################################
     ########   Continuous Distributions   ###########
