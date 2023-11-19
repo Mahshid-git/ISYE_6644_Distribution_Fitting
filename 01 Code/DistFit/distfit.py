@@ -6,16 +6,32 @@ import matplotlib.pyplot as plt
 
 class Fitting():
     ''' 
-
+    Fits data to input distributions using maximum likelihood estimate (MLE). 
+    Distributions: Bern(p), Bin(n,p), Geom(p), Poiss(λ), Unif(a,b), Exp(λ), Normal(μ,s), Gamma(α,β), Weibull(α,β)
+    Args:
+        data (pandas dataframe): data to be fitted to the specified distribution 
+    Returns: 
+        parameters of the specified distribution
     '''
-    def __init__(self):
-        pass    
+    def __init__(self, data):
+        if isinstance(data, pd.DataFrame):
+            pass
+        else:
+             # convert data to the correct format
+            data = pd.Series(data)
+
+        self.data = data
+        self.mu = data.mean()
+        self.sigma = data.std()  
+        self.size = data.shape[0]
+        self.data_min = data.min()
+        self.data_max = data.max()
     
     #################################################
     #########   Discrete Distributions   ############
     ################################################# 
     # 1) Bernoulli(p)
-    def bernoulli_fit(self, data):
+    def bernoulli_fit(self):
         '''
         fits data to ber(p) distribution
 
@@ -25,25 +41,21 @@ class Fitting():
         Returns: 
             p: parameter of bernoulli distribution , success rate
         '''
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-        p = data.mean()
+        p = self.mu
         return p
     
-    def bernoulli_plot(self, data, params):
+    def bernoulli_plot(self, params):
         x = np.arange(0, 2)
         y = [1-params, params]
         plt.plot(x, y, marker='o', linestyle=' ', color ='r', label="Fitted Bernoulli")
-        bins = np.arange(0, data.max() + 1.5) - 0.5 # trick to have bins centered on integers
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram", bins=bins)
+        bins = np.arange(0, self.data_max + 1.5) - 0.5 # trick to have bins centered on integers
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram", bins=bins)
         plt.legend()
         plt.show()
         pass
     
     # 2) Binomial(n,p)
-    def binomial_fit(self, data, n):
+    def binomial_fit(self, n):
         '''
         fits data to bin(n,p) distribution assuming n is known
 
@@ -55,27 +67,24 @@ class Fitting():
             p: parameter of binomial distribution  
         '''
         print('\nNote: When estimating p with very rare events and a small n, using MLE estimator leads to p=0 which sometimes is unrealistic and undesirable. In such cases, use alternative estimators.\n\n')
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-        p = data.mean()/n
+
+        p = self.mu/n
         return (n, p)
     
-    def binomial_plot(self, data, params):
+    def binomial_plot(self, params):
         import math
         n = params[0]
         x = np.arange(0, n+1) # number of success in n trials
         y = [math.comb(n, i)*(params[1]**i)*((1-params[1])**(n-i)) for i in x]
-        bins = np.arange(0, data.max() + 1.5) - 0.5 # trick to have bins centered on integers
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram", bins=bins)
+        bins = np.arange(0, self.data_max + 1.5) - 0.5 # trick to have bins centered on integers
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram", bins=bins)
         plt.plot(x, y, marker='o', linestyle=' ', color ='r', label="Fitted Binomial")
         plt.legend()
         plt.show()
         pass
     
     # 3) Geometric(p)
-    def geometric_fit(self, data):
+    def geometric_fit(self):
         '''
         fits data to geom(p) distribution
 
@@ -85,25 +94,21 @@ class Fitting():
         Returns: 
             p: parameter of geometric distribution  
         '''
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-        p = 1/(data.mean()+1)
+        p = 1/(self.mu+1)
         return p
     
-    def geometric_plot(self, data, params):
-        x = np.arange(1, data.max())
+    def geometric_plot(self, params):
+        x = np.arange(1, self.data_max)
         y = (params)*(1-params)**x
         plt.plot(x, y, marker='o', linestyle=' ', color ='r', label="Fitted Geometric")
-        bins = np.arange(0, data.max() + 1.5) - 0.5 # trick to have bins centered on integers
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram", bins=bins)
+        bins = np.arange(0, self.data_max + 1.5) - 0.5 # trick to have bins centered on integers
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram", bins=bins)
         plt.legend()
         plt.show()
         pass
 
     # 4) Poisson(lmabda)
-    def poisson_fit(self, data):
+    def poisson_fit(self):
         '''
         fits data to Poisson distribution
 
@@ -113,21 +118,17 @@ class Fitting():
         Returns: 
             _lambda: parameter of Poisson distribution  
         '''
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-                
-        _lambda = data.mean()
+              
+        _lambda = self.mu
         return _lambda
     
-    def poisson_plot(self, data, params):
+    def poisson_plot(self, params):
         from scipy.special import factorial
         _lambda = params
         x = np.arange(0, 51)
         y = np.exp(-_lambda)*_lambda**x/factorial(x)
-        bins = np.arange(0, data.max() + 1.5) - 0.5 # trick to have bins centered on integers
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram", bins=bins)
+        bins = np.arange(0, self.data_max + 1.5) - 0.5 # trick to have bins centered on integers
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram", bins=bins)
         plt.plot(x, y, marker='o', linestyle=' ', color ='r', label="Fitted Poisson")
         plt.legend()
         plt.show()
@@ -137,7 +138,7 @@ class Fitting():
     ########   Continuous Distributions   ###########
     ################################################# 
     # 1) Uniform(a,b)
-    def uniform_fit(self, data):
+    def uniform_fit(self):
         '''
         fits data to uniform(a,b) distribution
 
@@ -148,25 +149,21 @@ class Fitting():
             a: lower bound, parameter of uniform distribution 
             b: upper bound, parameter of uniform distribution 
         '''
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-        a = data.min()
-        b = data.max()
+        a = self.data_min
+        b = self.data_max
         return (a,b)
     
-    def uniform_plot(slef, data, params):
+    def uniform_plot(self, params):
         x = np.arange(params[0], params[1],.01)
         y = (1/(params[1]-params[0]))*np.ones(x.shape)
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram")
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram")
         plt.plot(x, y, color ='r', label="Fitted Uniform")
         plt.legend()
         plt.show()
         pass
 
     # 2) Exponential(lambda)
-    def exponential_fit(self, data):
+    def exponential_fit(self):
         '''
         fits data to exponential distribution
 
@@ -174,27 +171,21 @@ class Fitting():
             data (pandas dataframe): data to be fitted to the specified distribution 
 
         Returns: 
-            mu: 1/rate, parameter of exponential distribution 
+            self.mu: 1/rate, parameter of exponential distribution 
         '''
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-        mu = data.mean()
-
-        return mu
+        return self.mu
     
-    def exponential_plot(self, data, params):
+    def exponential_plot(self, params):
         x = np.arange(0, params*10,.01)
         y = (1/params)*np.exp(-x/params)
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram")
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram")
         plt.plot(x, y, color ='r', label="Fitted Exponential")
         plt.legend()
         plt.show()
         pass
     
     # 3) Normal(mu, sigma)
-    def normal_fit(self, data):
+    def normal_fit(self):
         '''
         fits data to normal distribution
 
@@ -205,60 +196,52 @@ class Fitting():
             mu: sample mean (1st parameter of Normal distribution) 
             sigma: MLE estimate of standard deviation (2nd parameter of Normal distribution)
         '''
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-        mu = data.mean()
-        sigma = data.std()
+        mu = self.mu #data.mean()
+        sigma = self.sigma #data.std()
 
         return (mu, sigma)
     
-    def normal_plot(self, data, params):
+    def normal_plot(self, params):
         x = (np.arange(-4, 4,.05))*params[1]+params[0]
         y = (1/(params[1]*np.sqrt(2*np.pi)))*np.exp(-((x-params[0])**2)/(2*params[1]**2))
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram")
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram")
         plt.plot(x, y, color ='r', label="Fitted Normal")
         plt.legend()
         plt.show()
         pass
     
     # 4) Weibul(alpha, beta)
-    def weibull_fit(slef, data):
+    def weibull_fit(self, tol=0.001):
         '''
         fits data to Weibull(alfa, beta) distribution
 
         Args:
             data (pandas dataframe): data to be fitted to the specified distribution 
+            tol: tolerance for fitting alpha
 
         Returns: 
             alfa: scale parameter of Weibull distribution; must be positive
             beta: shape parameter of Weibull distribution; must be positive 
         '''
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-        
+   
         # starting point for alpha [Thoman, Bain, and Antle (1969)]
-        n = data.shape[0] # data size
-        sum_ln_x_square = (np.log(data)**2).sum()
-        sum_ln_x = np.log(data).sum()
-        alfa_0 = (6*(sum_ln_x_square-sum_ln_x**2/n)/((n-1)*np.pi**2))**(-0.5)
-        A = sum_ln_x/n # average of ln(X)
+        sum_ln_x_square = (np.log(self.data)**2).sum()
+        sum_ln_x = np.log(self.data).sum()
+        alfa_0 = (6*(sum_ln_x_square-sum_ln_x**2/self.size)/((self.size-1)*np.pi**2))**(-0.5)
+        A = sum_ln_x/self.size # average of ln(X)
         alfa_new = alfa_0
         alfa_old = 100000.00 
-        while abs(alfa_new-alfa_old) < 0.001:
+        while abs(alfa_new-alfa_old) < tol:
             alfa_old = alfa_new
-            Bk = (data**alfa_old).sum()
-            Ck = ((data**alfa_old)*np.log(data)).sum()
-            Hk = ((data**alfa_old)*(np.log(data))**2).sum()
+            Bk = (self.data**alfa_old).sum()
+            Ck = ((self.data**alfa_old)*np.log(self.data)).sum()
+            Hk = ((self.data**alfa_old)*(np.log(self.data))**2).sum()
             alfa_new = alfa_old - (A+(1/alfa_old)-Ck/Bk)/(1/alfa_old + (Bk*Hk-Ck**2)/(BK**2))
         
-        beta = ((data**alfa_new).sum()/n)**(1/alfa_new)
+        beta = ((self.data**alfa_new).sum()/self.size)**(1/alfa_new)
         return (alfa_new, beta)
     
-    def weibull_plot(self, data, params):
+    def weibull_plot(self, params):
         import math
         alfa = params[0]
         beta = params[1]
@@ -267,7 +250,7 @@ class Fitting():
         x2 = np.arange(2,10,.2)
         x = np.concatenate((x1, x2), axis=0)
         y = alfa*(beta**(-alfa))*(x**(alfa-1))*(np.exp(-(x/beta)**alfa))
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram")
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram")
         plt.plot(x, y, color ='r', label="Fitted Weibull")
         plt.legend()
         plt.show()
@@ -280,7 +263,7 @@ class Fitting():
         reference: this function is used from: https://stackoverflow.com/questions/50508262/using-look-up-tables-in-python
 
         Args:
-            x: data to be fitted to the specified distribution 
+            x: point data whose y is unknown in (x,y) look-up table 
             x_list (list): look-up table x values
             y_list (list): look-up table y values
 
@@ -297,7 +280,7 @@ class Fitting():
 
         return y
 
-    def gamma_fit(self, data):
+    def gamma_fit(self):
         '''
         fits data to Gamma(alfa, beta) distribution
 
@@ -308,13 +291,7 @@ class Fitting():
             alfa: scale parameter of Weibull distribution; must be positive
             beta: shape parameter of Weibull distribution; must be positive 
         '''
-        if isinstance(data, pd.DataFrame):
-                pass
-        else:
-                data = pd.Series(data)
-        
-        n = data.shape[0] # data size
-        T = 1/(np.log(data.mean())-np.log(data).sum()/n)        
+        T = 1/(np.log(self.mu)-np.log(self.data).sum()/self.size)        
         
         alfa_list = [0.01, 0.019, 0.027, 0.036, 0.044, 0.052, 0.06, 0.068, 0.076, 0.083, 0.09, 0.098, 0.105, 
              0.112, 0.119, 0.126, 0.133, 0.14, 0.147, 0.153, 0.218, 0.279, 0.338, 0.396, 0.452, 0.507, 
@@ -329,18 +306,18 @@ class Fitting():
         T_array = np.concatenate((np.arange(.01,.2,.01), np.arange(.2, 4,.1), np.arange(4, 10,.2), np.arange(10, 25,.5), np.arange(25, 51, 5)), axis=0)
         T_list = list(T_array)
         
-        alfa = lookup(self, T, T_list, alfa_list)
-        beta = data.mean()/alfa
+        alfa = Fitting.lookup(self, T, T_list, alfa_list)
+        beta = self.mu/alfa
         return (alfa, beta)
     
-    def gamma_plot(self, data, params):
+    def gamma_plot(self, params):
         import math
         alfa = params[0]
         beta = params[1]
         # to change
         x = np.arange(0, 50, .1)
         y = (beta**(-alfa))*(x**(alfa-1))*(np.exp(-x/beta))/math.gamma(alfa)
-        plt.hist(data, alpha=.4, density = True, label="Data Histogram")
+        plt.hist(self.data, alpha=.4, density = True, label="Data Histogram")
         plt.plot(x, y, color ='r', label="Fitted Gamma")
         plt.legend()
         plt.show()
