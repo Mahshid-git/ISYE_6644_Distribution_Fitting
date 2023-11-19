@@ -20,12 +20,12 @@ class Fitting():
              # convert data to the correct format
             data = pd.Series(data)
 
-        self.data = data
         self.mu = data.mean()
         self.sigma = data.std()  
         self.size = data.shape[0]
         self.data_min = data.min()
         self.data_max = data.max()
+        self.data = data
     
     #################################################
     #########   Discrete Distributions   ############
