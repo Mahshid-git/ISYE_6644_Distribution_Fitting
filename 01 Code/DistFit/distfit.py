@@ -107,7 +107,7 @@ class Fitting():
         plt.show()
         pass
 
-    # 4) Poisson(lmabda)
+    # 4) Poisson(lambda)
     def poisson_fit(self):
         '''
         fits data to Poisson distribution
