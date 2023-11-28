@@ -30,6 +30,9 @@ class Fitting():
         self.data = data
 
     def guess_distributions(self):
+        '''
+        Limit the possible number of distributions based on data type
+        '''
         data_np = np.array(self.data)    
         integer_array = np.mod(data_np, 1)
         if integer_array.all() == 0:  # discrete distribution
