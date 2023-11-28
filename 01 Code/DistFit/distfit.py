@@ -28,7 +28,7 @@ class Fitting():
         self.data_min = data.min()
         self.data_max = data.max()
         self.data = data
-        
+
     def guess_distributions(self):
         data_np = np.array(self.data)    
         integer_array = np.mod(data_np, 1)
@@ -43,6 +43,8 @@ class Fitting():
                 dist.remove('Exponential')
                 dist.remove('Weibull')
                 dist.remove('Gamma')
+            elif self.data_min>0:
+                dist.remove('Normal')
         print('Note: only a limited number of distributions are considered in this library.\n')
         print('The possible distributions for the data are:', dist)
         if 'Binomial' in dist:
