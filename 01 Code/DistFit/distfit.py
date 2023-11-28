@@ -20,13 +20,34 @@ class Fitting():
              # convert data to the correct format
             data = pd.Series(data)
 
+        self.discrete_dist = ['Binomial', 'Geometric', 'Poisson']
+        self.continuous_dist = ['Uniform', 'Exponential', 'Normal',  'Weibull', 'Gamma']
         self.mu = data.mean()
         self.sigma = data.std()  
         self.size = data.shape[0]
         self.data_min = data.min()
         self.data_max = data.max()
         self.data = data
-    
+        
+    def guess_distributions(self):
+        data_np = np.array(self.data)    
+        integer_array = np.mod(data_np, 1)
+        if integer_array.all() == 0:  # discrete distribution
+            if set(self.data.unique()) == {1, 0}:
+                dist = ['Bernoulli']
+            else:
+                dist = self.discrete_dist
+        else: # continuous distibution
+            dist = self.continuous_dist
+            if self.data_min < 0:
+                dist.remove('Exponential')
+                dist.remove('Weibull')
+                dist.remove('Gamma')
+        print('Note: only a limited number of distributions are considered in this library.\n')
+        print('The possible distributions for the data are:', dist)
+        if 'Binomial' in dist:
+            print('If data are binomial, n is at least', self.data_max)
+        return dist
     #################################################
     #########   Discrete Distributions   ############
     ################################################# 
