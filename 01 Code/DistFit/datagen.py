@@ -1,8 +1,4 @@
 import numpy as np
-from scipy.stats import chisquare
-import scipy.stats as stats
-import pandas as pd
-import matplotlib.pyplot as plt
 
 class Datagen():
     def __init__(self, dist_type, row_count, par) -> None:
