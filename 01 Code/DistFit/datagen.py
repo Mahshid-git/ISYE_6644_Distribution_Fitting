@@ -59,7 +59,7 @@ class Datagen():
             data = np.random.uniform(self.a, self.b, self.row_count)
             
         elif self.dist_type == 'bernoulli':
-            data = np.random.bernoulli(self.a., self.row_count)
+            data = np.random.bernoulli(self.a, self.row_count)
         
         else:
             raise ValueError("Change distribution type or modify parameters")
