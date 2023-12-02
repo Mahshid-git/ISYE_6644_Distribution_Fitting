@@ -46,8 +46,6 @@ class Fitting():
                 dist.remove('Exponential')
                 dist.remove('Weibull')
                 dist.remove('Gamma')
-            elif self.data_min>0:
-                dist.remove('Normal')
         print('Note: only a limited number of distributions are considered in this library.\n')
         print('The possible distributions for the data are:', dist)
         if 'Binomial' in dist:
@@ -348,3 +346,5 @@ class Fitting():
         plt.legend()
         plt.show()
         pass
+
+    def GoF(self, )
