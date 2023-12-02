@@ -53,13 +53,13 @@ class Datagen():
             data=np.random.gamma(self.shape, self.scale, self.row_count)
         
         elif self.dist_type == 'weibull': 
-            data=b*np.random.weibull(a, self.row_count) #this is one-parameter Weibull; for 2-D => multiply by b
+            data=self.b*np.random.weibull(self.a, self.row_count) #this is one-parameter Weibull; for 2-D => multiply by b
         
         elif self.dist_type == 'uniform':
-            data = np.random.uniform(a, b, self.row_count)
+            data = np.random.uniform(self.a, self.b, self.row_count)
             
         elif self.dist_type == 'bernoulli':
-            data = np.random.bernoulli(a, self.row_count)
+            data = np.random.bernoulli(self.a., self.row_count)
         
         else:
             raise ValueError("Change distribution type or modify parameters")
