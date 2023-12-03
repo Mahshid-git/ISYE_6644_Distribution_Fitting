@@ -6,7 +6,7 @@ import DistFit.datagen as dgn
 class Gof():
     def __init__(self, dist_type, par) -> None:
         self.dist_type = dist_type
-        if dist_type in ['normal',  'weibull', 'gamma']:
+        if dist_type in ['normal',  'weibull', 'gamma', 'uniform']:
             self.s = 2 # number of estimated parameters
         else:
             self.s = 1
@@ -99,7 +99,7 @@ class Gof():
     
         test_stat = chisquare(obs_freq, exp_freq, ddof=k-1-self.s).statistic #one-way chi squared test
         critical_val = chi2.isf(alfa, k-1-self.s) #isf: inverse survival function
-        print("Test Statistics:", test_stat, "; Critical Value:", critical_val)
+        print("Test Statistics: %(tstat).4f;  Critical Value: %(crval).4f" %{'tstat': test_stat, 'crval': critical_val})
         if test_stat < critical_val:
             print("Accept H0 that the distribution is a good fit at the given significance level.")
             return True

@@ -52,6 +52,8 @@ class Fitting():
                 dist.remove('Exponential')
                 dist.remove('Weibull')
                 dist.remove('Gamma')
+            if abs(self.data.skew()) > 1: #data is not symmetrical
+                dist.remove('Normal')
         print('Note: only a limited number of distributions are considered in this library.\n')
         print('The possible distributions for the data are:', dist)
         if 'Binomial' in dist:
