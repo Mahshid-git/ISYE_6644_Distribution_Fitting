@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.stats import chisquare
+# from scipy.stats import chisquare
 import scipy.stats as stats
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -13,13 +13,19 @@ class Fitting():
     Returns: 
         parameters of the specified distribution
     '''
-    def __init__(self, data):
+    def __init__(self, data, dist_type, n=None):
         if isinstance(data, pd.DataFrame):
             pass
         else:
              # convert data to the correct format
             data = pd.Series(data)
 
+        self.dist_type = dist_type
+        if dist_type=='binomial':
+            if n is None:
+                raise ValueError("binomial distribution require input n")
+            else:
+                self.n = n
         self.discrete_dist = ['Binomial', 'Geometric', 'Poisson']
         self.continuous_dist = ['Uniform', 'Exponential', 'Normal',  'Weibull', 'Gamma']
         self.mu = data.mean()
@@ -51,6 +57,38 @@ class Fitting():
         if 'Binomial' in dist:
             print('If data are binomial, n is at least', self.data_max)
         return dist
+
+    def fit(self):
+        if self.dist_type== 'normal':
+            return Fitting.normal_fit(self)
+        
+        elif self.dist_type== 'geometric':
+            return Fitting.geometric_fit(self)  
+        
+        elif self.dist_type== 'binomial':
+            return Fitting.binomial_fit(self)
+        
+        elif self.dist_type == 'poisson':
+            return Fitting.poisson_fit(self)    
+        
+        elif self.dist_type== 'exponential':
+            return Fitting.exponential_fit(self)
+    
+        elif self.dist_type == 'gamma':
+            return Fitting.gamma_fit(self)
+        
+        elif self.dist_type == 'weibull': 
+            return Fitting.weibull_fit(self)
+        
+        elif self.dist_type == 'uniform':
+            return Fitting.uniform_fit(self)
+            
+        elif self.dist_type == 'bernoulli':
+            return Fitting.bernoulli_fit(self)
+        
+        else:
+            raise ValueError("Change distribution type or modify parameters")
+    
     #################################################
     #########   Discrete Distributions   ############
     ################################################# 
@@ -79,7 +117,7 @@ class Fitting():
         pass
     
     # 2) Binomial(n,p)
-    def binomial_fit(self, n):
+    def binomial_fit(self):
         '''
         fits data to bin(n,p) distribution assuming n is known
 
@@ -92,8 +130,8 @@ class Fitting():
         '''
         print('\nNote: When estimating p with very rare events and a small n, using MLE estimator leads to p=0 which sometimes is unrealistic and undesirable. In such cases, use alternative estimators.\n\n')
 
-        p = self.mu/n
-        return (n, p)
+        p = self.mu/self.n
+        return (self.n, p)
     
     def binomial_plot(self, params):
         import math
@@ -118,7 +156,7 @@ class Fitting():
         Returns: 
             p: parameter of geometric distribution  
         '''
-        p = 1/(self.mu+1)
+        p = 1/(self.mu) #1/(self.mu+1)
         return p
     
     def geometric_plot(self, params):
@@ -347,4 +385,8 @@ class Fitting():
         plt.show()
         pass
 
-    def GoF(self, )
+    # def GoF(self, test_dist):
+    #     from scipy.stats import goodness_of_fit as gof
+    #     import scipy.stats
+    #     gof(dist=scipy.stats.norm, data=data, known_params=None, fit_params={'loc':a, 'scale':b}, guessed_params=None)
+    #     return

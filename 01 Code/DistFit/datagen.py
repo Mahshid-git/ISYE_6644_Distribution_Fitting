@@ -1,7 +1,8 @@
 import numpy as np
 
 class Datagen():
-    def __init__(self, dist_type, row_count, par) -> None:
+    def __init__(self, dist_type, row_count, par, seed=43) -> None:
+        np.random.seed(seed)
         self.dist_type = dist_type
         self.row_count = row_count
         if self.dist_type== 'normal':
@@ -29,6 +30,7 @@ class Datagen():
             self.a, self.b = par
              
         elif self.dist_type == 'bernoulli':
+            self.n = 1
             self.a = par
         else:
             raise ValueError("Change distribution type or modify parameters")
@@ -59,7 +61,7 @@ class Datagen():
             data = np.random.uniform(self.a, self.b, self.row_count)
             
         elif self.dist_type == 'bernoulli':
-            data = np.random.bernoulli(self.a, self.row_count)
+            data = np.random.binomial(self.n, self.a, self.row_count)
         
         else:
             raise ValueError("Change distribution type or modify parameters")

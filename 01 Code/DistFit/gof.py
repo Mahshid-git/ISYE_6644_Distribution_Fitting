@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.stats import chi2, chisquare
+import DistFit.datagen as dgn
 
 
 class Gof():
@@ -33,7 +34,6 @@ class Gof():
             else:
                 exp_freq[i] = ((data >= bin_edges[i]) & (data < bin_edges[i+1])).sum()
     
-        result = []
         if n0 == len(bin_edges):
             return exp_freq
         else:
@@ -83,21 +83,26 @@ class Gof():
         return exp_freq, obs_freq
     
     def gof(self, data, k=5, alfa=0.05, seed=43):
-        n = data.shape[0]
+        if self.dist_type == 'bernoulli':
+            raise ValueError("GoF is not valid for Bernoulli.")
+        size = data.shape[0]
         # generate data from expected distribution
         np.random.seed(seed)
-        exp_data = Gof.data_generation(self.dist_type, self.par, n)
+        data_dist = dgn.Datagen(dist_type=self.dist_type, row_count=size, par=self.par) 
+        exp_data = data_dist.data_generation()
         # calculate frequency
         obs_freq, bin_edges = np.histogram(data, bins=k)
-        exp_freq = Gof.frequency_calc(exp_data, list(bin_edges))
+        exp_freq = Gof.frequency_calc(self, exp_data, list(bin_edges))
         # combine bins if frequency is small
-        exp_freq, obs_freq = Gof.bigger_bins(list(exp_freq), list(obs_freq))
+        exp_freq, obs_freq = Gof.bigger_bins(self, list(exp_freq), list(obs_freq))
         k = len(exp_freq)
     
         test_stat = chisquare(obs_freq, exp_freq, ddof=k-1-self.s).statistic #one-way chi squared test
         critical_val = chi2.isf(alfa, k-1-self.s) #isf: inverse survival function
         print("Test Statistics:", test_stat, "; Critical Value:", critical_val)
         if test_stat < critical_val:
+            print("Accept H0 that the distribution is a good fit at the given significance level.")
             return True
         else:
+            print("Reject H0, the distribution is NOT a good fit at this significance level.")
             return False
