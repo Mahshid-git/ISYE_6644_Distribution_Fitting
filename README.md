@@ -7,8 +7,6 @@ Date: December 2023
 # Abstract
 The DistFit package is a Python package designed for distribution fitting and goodness-of-fit testing. It estimates distribution parameters using Maximum Likelihood Estimation (MLE)  for different probability distributions, as well as Chi-Square goodness of fit for assessment of how well a given distribution fits a set of observed data, The package is adept at handling both discrete and continuous distributions, offering users a flexible and versatile tool for conducting in-depth statistical analyses. The implemented distributions are: Bernoulli, Binomial, Geometric, Poisson, Uniform, Exponential, Normal, Weibull, and Gamma. This paper serves as a comprehensive guide to DistFit, including some details about each distribution type. The MLE approach is employed to estimate the parameters of these distributions.
 
-Furthermore, the DistFit package includes an Examples file showcasing the integration of these modules. Users can visualize the fitted distributions, explore possible alternatives, and conduct hypothesis tests to assess the fit of the chosen distribution.
-
 Key features of DistFit include easy use, flexibility in handling diverse distribution types, and efficient algorithms for parameter estimation. The package serves as a valuable asset for distribution analysis and hypothesis testing in Python.
 
 
@@ -62,3 +60,4 @@ The following are the key components of this module:
 The  goodness-of-fit analysis should be used in conjunction with the "distfit" class to ensure the selected distribution and its estimated parameters are a good fit. The “distfit” class, as previously discussed, efficiently fits data to a variety of probability distributions using the MLE method.
 
 ## Examples 
+The DistFit package includes an Examples file showcasing the integration of these modules. Users can visualize the fitted distributions, explore possible alternatives, and conduct hypothesis tests to assess the fit of the chosen distribution.
