@@ -1,5 +1,6 @@
 # Fitting Data to Probability Distributions Using Maximum Likelihood Estimate (MLE) - DistFit
 Authors: Mahshid Jafar Pour, Mehdi Sadeghi
+
 Date: December 2023
 
 # Abstract
