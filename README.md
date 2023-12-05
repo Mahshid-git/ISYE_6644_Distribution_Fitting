@@ -61,3 +61,5 @@ The  goodness-of-fit analysis should be used in conjunction with the "distfit" c
 
 ## Examples 
 The DistFit package includes an Examples file showcasing the integration of these modules. Users can visualize the fitted distributions, explore possible alternatives, and conduct hypothesis tests to assess the fit of the chosen distribution.
+
+
