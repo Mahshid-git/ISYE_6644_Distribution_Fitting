@@ -48,7 +48,7 @@ This function should be used as a high-level guess of the distribution type. It 
 ### Fit (Parameter Estimation)
 MLE provides a systematic and versatile approach to fitting data to a range of distributions. It alsoempowering users with tools for exploratory data analysis.The visualizations provide an understanding of how well the fitted distributions align with the observed data.
 
-### Gof (Goodness of Fit Test)
+## Gof (Goodness of Fit Test)
 The gof (Goodness of Fit) module in DistFit evaluates how well a chosen probability distribution fits the observed data. It employs chi-squared goodness of fit test to assess the statistical significance of the difference between observed and expected frequencies. .. 
 
 The following are the key components of this module:
