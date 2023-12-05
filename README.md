@@ -11,9 +11,9 @@ Key features of DistFit include easy use, flexibility in handling diverse distri
 
 
 # Methodology
-The DistFit library is a Python based application that has three distinct modules: datagen, distfit, and gof. These modules perform data generation, distribution fitting, data visualization, and goodness-of-fit analysis. Additionally, an examples file demonstrates real-world applications of the datagen, distfit, and gof modules. It is a practical guide, describing how to use DistFit to fit distributions to datasets and analyze them. The examples show the versatility  of DistFit in fitting distributions to data and assessing the goodness of fit. The subsequent sections describe the specific details of each module, their functionalities and how to use them.
+The DistFit library is a Python based application that has three distinct modules: datagen, distfit, and gof. These modules perform data generation, distribution fitting, data visualization, and goodness-of-fit analysis. Additionally, an examples file demonstrates real-world applications of the datagen, distfit, and gof modules. It is a practical guide, describing how to use DistFit to fit distributions to datasets and analyze them. The examples show the versatility  of DistFit in fitting distributions to data and assessing the goodness of fit. The subsequent sections describe the specific details of each module and file included in this project, their functionalities and how to use them.
 
-## datagen
+## datagen.py
 The datagen module within DistFit is used for random data generation based on specified probability distributions. This module provides a convenient way for users to create artificial datasets of various probability distributions. The primary purpose of the datagen module is to facilitate testing and experimentation with DistFit's distribution fitting capabilities.
 
 The Datagen takes distribution type, the desired number of data, and distribution-specific parameters. It supports a variety of distribution types, including Normal, Geometric, Binomial, Poisson, Exponential, Gamma, Weibull, Uniform, and Bernoulli.
@@ -28,7 +28,7 @@ Initialization Parameters are:
 
 The data_generation method in this module generates synthetic data based on the specified distribution type and parameters. It utilizes NumPy's random number generation functions for each distribution type.
 
-## distfit
+## distfit.py
 The methodology implemented in the Fitting class of the DistFit Python package revolves around fitting data to various probability distributions using MLE method. The class supports both discrete and continuous distributions. The key components of the methodology involve Initialization, Guessing Distributions, and parameter estimation of various distribution types. Additionally, the plot method can be used to visually compare the fitted distributions versus the data histogram
 
 ### Initialization
@@ -48,7 +48,7 @@ This function should be used as a high-level guess of the distribution type. It 
 ### Fit (Parameter Estimation)
 MLE provides a systematic and versatile approach to fitting data to a range of distributions. It alsoempowering users with tools for exploratory data analysis.The visualizations provide an understanding of how well the fitted distributions align with the observed data.
 
-## Gof (Goodness of Fit Test)
+## gof.py (Goodness of Fit Test)
 The gof (Goodness of Fit) module in DistFit evaluates how well a chosen probability distribution fits the observed data. It employs chi-squared goodness of fit test to assess the statistical significance of the difference between observed and expected frequencies. .. 
 
 The following are the key components of this module:
@@ -59,7 +59,7 @@ The following are the key components of this module:
 * Goodness of Fit Test: Conducts a goodness-of-fit test using the chi-squared statistic. It generates expected data based on the specified distribution, calculates observed and expected frequencies, optimizes bins, and performs the chi-squared test. As a result of approximate frequency calculation for the expected data, the goodness of fit test is approximate and the results should be treated cautiously when the test statistics and critical values are close in values.
 The  goodness-of-fit analysis should be used in conjunction with the "distfit" class to ensure the selected distribution and its estimated parameters are a good fit. The “distfit” class, as previously discussed, efficiently fits data to a variety of probability distributions using the MLE method.
 
-## Examples 
+## Examples.ipynb 
 The DistFit package includes an Examples file showcasing the integration of these modules. Users can visualize the fitted distributions, explore possible alternatives, and conduct hypothesis tests to assess the fit of the chosen distribution.
 
 
