@@ -22,7 +22,7 @@ The Datagen takes distribution type, the desired number of data, and distributio
 
 Initialization Parameters are:
 
-  •  dist_type: Type of probability distribution (e.g., 'Normal', 'Geometric', 'Binomial').
+  •  * dist_type: Type of probability distribution (e.g., 'Normal', 'Geometric', 'Binomial').
 
   •  row_count: Number of rows (data points) to be generated.
 
